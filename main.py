@@ -97,12 +97,12 @@ def run_other(all_data, model='svc'):
         'gbc': GradientBoostingClassifier()
     }
 
-    tfidf = TfidfVectorizer(sublinear_tf=False, min_df=2, norm='l2', ngram_range=(1,2), stop_words=None)
+    tfidf = TfidfVectorizer(sublinear_tf=False, min_df=2, norm='l2', ngram_range=(1,2), stop_words='english')
 
     features = tfidf.fit_transform(all_data['tweet'])
     labels = [class_mapping[category].index(1) for category in all_data['category'].values]
 
-    model = LinearSVC()
+    model = models[model]
 
     X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.1)
 
@@ -136,7 +136,7 @@ def main():
 
         # micro, macro = run_lstm(all_data)
 
-        micro, macro = run_other(all_data, model='gbc')
+        micro, macro = run_other(all_data, model='svc')
 
         total_micro += micro
         total_macro += macro
